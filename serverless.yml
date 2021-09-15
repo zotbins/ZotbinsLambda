@@ -118,3 +118,7 @@ functions:
 #       Value: "Some output value"
 plugins:
   - serverless-offline
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux

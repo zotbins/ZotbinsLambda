@@ -62,5 +62,4 @@ And we can then manipulate the data inside there.
 # Helpful Links
 - https://www.serverless.com/plugins/serverless-python-requirements
 - https://www.serverless.com/blog/serverless-python-packaging
-
-
+- https://stackoverflow.com/questions/6506578/how-to-create-a-new-database-using-sqlalchemy 
