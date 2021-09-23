@@ -64,7 +64,36 @@ functions:
       - httpApi:
           path: /
           method: get
-    
+  bins:
+    # TODO: Look into adding paths parameters to map to the path
+    handler: handler.bin
+    events:
+      - httpApi:
+          path: /bin/{uuid}
+          method: get
+      - httpApi:
+          path: /bin/{uuid}
+          method: delete
+  bin:
+    handler: handler.bins
+    events:
+      - httpApi:
+          path: /bins
+          method: get
+      - httpApi:
+          path: /bins
+          method: post
+  location:
+    handler: handler.location
+    events:
+      - httpApi:
+          path: /bin/{UUID}/location
+          method: get
+      - httpApi:
+          path: /bin/{UUID}/location
+          method: put
+
+
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details

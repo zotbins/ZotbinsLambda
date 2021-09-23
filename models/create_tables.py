@@ -1,7 +1,6 @@
-from sqlalchemy import MetaData
-from models import base, db
-from models import BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
-from models import WeightMetric, FullnessMetric, UsageMetric
+from db_models import base, db
+from db_models import BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
+from db_models import WeightMetric, FullnessMetric, UsageMetric
 
 tables_classes = [
     BinInfo.__table__,
