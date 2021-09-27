@@ -75,6 +75,7 @@ def bins(event, context):
         return response
     elif method_type == "POST":
         # TODO: Figure out how to get request body
+        print(event["body"])
         pass
 
 
@@ -100,4 +101,20 @@ def location(event, context):
 
             return response
     elif method_type == "PUT":
-        pass
+        try:
+            bin_controller.update_bin_location(uuid, 1.0, 1.0)
+
+            response = {
+                "statusCode": 200,
+                "body": { "Detail": "bin location successfully updated" }
+            }
+
+            return response
+        except Exception as e:
+            # TODO: refactor statuscode 404 response as a function
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
