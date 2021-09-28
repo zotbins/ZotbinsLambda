@@ -48,6 +48,13 @@ We can also directly access the PostgresSQL database by running:
 docker exec -it timescaledb psql -U postgres
 ```
 
+But it would be more convenient to create the tables by running the create_tables.py script. Just make sure that the docker container
+has started by running:
+```bash
+docker start timescaledb
+python create_tables.py
+```
+
 ## Running the Lambda Locally
 
 To run the project locally, use
