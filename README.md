@@ -6,7 +6,7 @@ The ZotbinsLambda project organizes the Lambda functions used for manipulating t
 
 First clone this project:
 ```bash
-git clone "link"
+git clone https://github.com/zotbins/ZotbinsLambda.git
 ```
 In order to run this project, we'll need:
 - The Serverless Framework
@@ -19,7 +19,12 @@ npm install serverless -g
 ```
 This command installs serverless globally, so you won't need a separate serverless package for other npm projects.
 
-To install Serverless Offline, run:
+To install all the necessary npm packages, run:
+```bash
+npm i
+```
+
+**Not necessary, but nice to know for future projects**: To install Serverless Offline, run:
 ```bash
 npm install serverless-offline --save-dev
 ```

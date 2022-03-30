@@ -14,3 +14,5 @@ tables_classes = [
 ]
 
 base.metadata.create_all(db, tables=tables_classes)
+
+# TODO: Automate insertion of test data
