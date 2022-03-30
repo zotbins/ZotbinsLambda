@@ -40,6 +40,7 @@ pip install -r requirements.txt
 ```
 
 ## TimescaleDB Docker
+Before you begin, make sure to visit the following link to install docker: https://docs.docker.com/get-docker/.
 
 Docker is used to be create a TimescaleDB database to test our data locally. To install, run:
 ```bash
