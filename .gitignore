@@ -1,0 +1,16 @@
+# npm
+/node_modules
+
+# for the cool kids who use jetbrains ides
+/.idea
+
+# python
+/__pycache__
+
+# python modules
+/bin
+/include
+/lib
+/lib64
+/share
+/pyvenv.cfg

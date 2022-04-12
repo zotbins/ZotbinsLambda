@@ -1,5 +1,5 @@
 from db_models import base, db
-from db_models import BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
+from db_models import BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor
 from db_models import WeightMetric, FullnessMetric, UsageMetric
 
 tables_classes = [
@@ -13,6 +13,7 @@ tables_classes = [
     UsageMetric.__table__
 ]
 
+# automates creating tables
 base.metadata.create_all(db, tables=tables_classes)
 
 # TODO: Automate insertion of test data
