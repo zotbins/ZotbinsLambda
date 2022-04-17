@@ -1,5 +1,6 @@
 import json
-from controllers import bin_controller
+from controllers import bin_controller, metrics_controller
+from datetime import datetime
 from utils import encoder
 
 
@@ -118,3 +119,107 @@ def location(event, context):
             }
 
             return response
+
+def fullness_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    uuid = event["rawPath"].split("/")[2]
+    time_stamp = event["rawPath"].split("/")[3]
+    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            fullness_info = metrics_controller.get_fullness_by_uuid(uuid)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(fullness_info)
+            }
+
+            return response
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
+
+
+def usage_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    uuid = event["rawPath"].split("/")[2]
+    time_stamp = event["rawPath"].split("/")[3]
+    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            usage_info = metrics_controller.get_usage_by_uuid(uuid)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(usage_info)
+            }
+
+            return response
+
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
+
+def weight_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    uuid = event["rawPath"].split("/")[2]
+    time_stamp = event["rawPath"].split("/")[3]
+    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            weight_info = metrics_controller.get_weight_by_uuid(uuid)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(weight_info)
+            }
+
+            return response
+            
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
+
+
