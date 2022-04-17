@@ -96,19 +96,19 @@ functions:
     handler: handler.fullness_metrics
     events:
       - httpApi:
-          path: /bin/{UUID}/fullness/?start_timestamp=&end_timestamp=
+          path: /bin/{UUID}/fullness
           method: get
   usage_metrics:
     handler: handler.usage_metrics
     events:
       - httpApi:
-          path: /bin/{UUID}/usage/?start_timestamp=&end_timestamp=
+          path: /bin/{UUID}/usage
           method: get
   weight_metrics:
     handler: handler.weight_metrics
     events:
       - httpApi:
-          path: /bin/{UUID}/weight/?start_timestamp=&end_timestamp=
+          path: /bin/{UUID}/weight
           method: get
 
 #    The following are a few example events you can configure
