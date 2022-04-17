@@ -92,11 +92,23 @@ functions:
       - httpApi:
           path: /bin/{UUID}/location
           method: put
-  metrics:
-    handler: handler.metrics
+  fullness_metrics:
+    handler: handler.fullness_metrics
     events:
       - httpApi:
-          path: /metrics
+          path: /bin/{UUID}/fullness/?start_timestamp=&end_timestamp=
+          method: get
+  usage_metrics:
+    handler: handler.usage_metrics
+    events:
+      - httpApi:
+          path: /bin/{UUID}/usage/?start_timestamp=&end_timestamp=
+          method: get
+  weight_metrics:
+    handler: handler.weight_metrics
+    events:
+      - httpApi:
+          path: /bin/{UUID}/weight/?start_timestamp=&end_timestamp=
           method: get
 
 #    The following are a few example events you can configure
