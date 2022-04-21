@@ -4,6 +4,13 @@ from utils import encoder
 
 
 def hello(event, context):
+    """
+    Test function returning default message
+    Returns
+    -------
+    Returns a json encoded object: dict
+        Contains a default message and the event object that called this handler function
+    """
     body = {
         "message": "Go Serverless v1.0! Your function executed successfully!",
         "input": event
@@ -18,6 +25,26 @@ def hello(event, context):
 
 
 def bin(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves information on bin with specific uuid
+        If bin doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains encoded bin info if bin is found, else error message
+    DELETE
+    ------
+        Removes bin with specific uuid from database
+        If bin doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains a success message is bin is successfully removed, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     uuid = event["rawPath"].split("/")[-1]
 
@@ -62,6 +89,20 @@ def bin(event, context):
 
 
 def bins(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all bins
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all bins
+    POST
+    ----
+        TBD
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -80,6 +121,26 @@ def bins(event, context):
 
 
 def location(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves location of bin with specific uuid
+        If bin doesn't exist, returns an error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains the coordinates of the bin (latitude,longitude) if bin exists, else error message
+    PUT
+    ---
+        Updates location of bin with specific uuid
+        If bin doesn't exist, returns an error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains success message if location of bin was successfully updated, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     uuid = event["rawPath"].split("/")[2]
 
@@ -106,7 +167,7 @@ def location(event, context):
 
             response = {
                 "statusCode": 200,
-                "body": { "Detail": "bin location successfully updated" }
+                "body": {"Detail": "bin location successfully updated"}
             }
 
             return response
