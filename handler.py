@@ -222,4 +222,41 @@ def weight_metrics(event, context):
 
             return response
 
+def all_fullness_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
 
+    if method_type == "GET":
+        all_fullness = metrics_controller.get_all_fullness()
+
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(all_fullness)
+        }
+
+        return response
+
+def all_usage_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+
+    if method_type == "GET":
+        all_usage = metrics_controller.get_all_usage()
+
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(all_usage)
+        }
+
+        return response
+
+def all_weight_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+
+    if method_type == "GET":
+        all_weight = metrics_controller.get_all_weight()
+
+        response = {
+            "statusCode": 200,
+            "body": json.dumps(all_weight)
+        }
+
+        return response

@@ -110,6 +110,25 @@ functions:
       - httpApi:
           path: /bin/{UUID}/weight
           method: get
+  all_fullness_metrics:
+    handler: handler.all_fullness_metrics
+    events:
+      - httpApi:
+          path: /fullness_metrics
+          method: get
+  all_usage_metrics:
+    handler: handler.all_usage_metrics
+    events:
+      - httpApi:
+          path: /usage_metrics
+          method: get
+  all_weight_metrics:
+    handler: handler.all_weight_metrics
+    events:
+      - httpApi:
+          path: /weight_metrics
+          method: get
+
 
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
