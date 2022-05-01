@@ -260,3 +260,102 @@ def all_weight_metrics(event, context):
         }
 
         return response
+
+def filter_fullness_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    sensor_id = event["rawPath"].split("/")[2]
+    timestamp = event["rawQueryString"].split("&")
+    start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+    end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            fullness_info = metrics_controller.get_fullness_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(fullness_info)
+            }
+
+            return response
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
+
+def filter_usage_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    sensor_id = event["rawPath"].split("/")[2]
+    timestamp = event["rawQueryString"].split("&")
+    start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+    end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            usage_info = metrics_controller.get_usage_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(usage_info)
+            }
+
+            return response
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response
+
+def filter_weight_metrics(event, context):
+    method_type = event["routeKey"].split(" ")[0]
+    sensor_id = event["rawPath"].split("/")[2]
+    timestamp = event["rawQueryString"].split("&")
+    start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+    end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
+
+    if end_time < start_time:
+        response = {
+            "statusCode": 404,
+            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+        }
+
+        return response
+
+    if method_type == "GET":
+        try:
+            weight_info = metrics_controller.get_weight_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
+
+            response = {
+                "statusCode": 200,
+                "body": json.dumps(weight_info)
+            }
+
+            return response
+        except Exception as e:
+            response = {
+                "statusCode": 404,
+                "body": json.dumps({"detail": "Bin not found"})
+            }
+
+            return response

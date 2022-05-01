@@ -128,6 +128,24 @@ functions:
       - httpApi:
           path: /weight_metrics
           method: get
+  filter_fullness_metrics:
+    handler: handler.filter_fullness_metrics
+    events:
+      - httpApi:
+          path: /fullness_metrics/{sensor_id}
+          method: get
+  filter_usage_metrics:
+    handler: handler.filter_usage_metrics
+    events:
+      - httpApi:
+          path: /usage_metrics/{sensor_id}
+          method: get
+  filter_weight_metrics:
+    handler: handler.filter_weight_metrics
+    events:
+      - httpApi:
+          path: /weight_metrics/{sensor_id}
+          method: get
 
 
 #    The following are a few example events you can configure

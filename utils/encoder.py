@@ -1,5 +1,5 @@
 from models.db_models import BinInfo, FullnessMetric, UsageMetric, WeightMetric
-
+from datetime import datetime
 
 def encode_bin_info_list(bins) -> None:
     "Encodes list of bin infos"
@@ -27,7 +27,7 @@ def encode_fullness_info(fullness: FullnessMetric) -> dict:
 
     return {
         "id": fullness.id,
-        "timestamp": fullness.timestamp,
+        "timestamp": fullness.timestamp.isoformat(sep=' ', timespec='seconds'),
         "fullness": fullness.fullness,
         "sensor_id": fullness.sensor_id
     }
@@ -42,7 +42,7 @@ def encode_usage_info(usage: UsageMetric) -> dict:
 
     return {
         "id": usage.id,
-        "timestamp": usage.timestamp,
+        "timestamp": usage.timestamp.isoformat(sep=' ', timespec='seconds'),
         "used_rate": usage.used_rate,
         "sensor_id": usage.sensor_id
     }
@@ -57,7 +57,7 @@ def encode_weight_info(weight: WeightMetric) -> dict:
 
     return {
         "id": weight.id,
-        "timestamp": weight.timestamp,
+        "timestamp": weight.timestamp.isoformat(sep=' ', timespec='seconds'),
         "weight": weight.weight,
         "sensor_id": weight.sensor_id
     }
