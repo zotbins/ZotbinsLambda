@@ -17,7 +17,7 @@ class BinType(enum.Enum):
 
 class BinInfo(base):
     __tablename__ = "bin_info"
-    uuid = Column(String(8))
+    uuid = Column(String(36))
     lat = Column(Float)
     lon = Column(Float)
     bin_type = Column(Enum(BinType))
@@ -67,7 +67,6 @@ class WeightMetric(base):
     __tablename__ = "weight_metric"
     timestamp = Column(DateTime)
     weight = Column(Integer)
-    #sensor_id = Column(Integer, ForeignKey("weight_sensor.sensor_id"))
 
     # One to Many relationship with WeightSensor
     id = Column(Integer, primary_key=True)
