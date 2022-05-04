@@ -265,109 +265,107 @@ def filter_weight_metrics(event, context):
             return response
 
 
-# Unneeded functions as of right now
-'''
-# Unneeded as fullness metric does not have uuid attribute yet
-def fullness_metrics(event, context):
-    method_type = event["routeKey"].split(" ")[0]
-    uuid = event["rawPath"].split("/")[2]
-    time_stamp = event["rawPath"].split("/")[3]
-    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
-    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+# # Unneeded functions as of right now
+# # Unneeded as fullness metric does not have uuid attribute yet
+# def fullness_metrics(event, context):
+#     method_type = event["routeKey"].split(" ")[0]
+#     uuid = event["rawPath"].split("/")[2]
+#     time_stamp = event["rawPath"].split("/")[3]
+#     start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+#     end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+#     if end_time < start_time:
+#         response = {
+#             "statusCode": 404,
+#             "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+#         }
 
-        return response
+#         return response
 
-    if method_type == "GET":
-        try:
-            fullness_info = metrics_controller.get_fullness_by_uuid(uuid)
+#     if method_type == "GET":
+#         try:
+#             fullness_info = metrics_controller.get_fullness_by_uuid(uuid)
 
-            response = {
-                "statusCode": 200,
-                "body": json.dumps(fullness_info)
-            }
+#             response = {
+#                 "statusCode": 200,
+#                 "body": json.dumps(fullness_info)
+#             }
 
-            return response
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
-            }
+#             return response
+#         except Exception as e:
+#             response = {
+#                 "statusCode": 404,
+#                 "body": json.dumps({"detail": "Bin not found"})
+#             }
 
-            return response
+#             return response
 
-# Unneeded as usage metric does not have uuid attribute yet
-def usage_metrics(event, context):
-    method_type = event["routeKey"].split(" ")[0]
-    uuid = event["rawPath"].split("/")[2]
-    time_stamp = event["rawPath"].split("/")[3]
-    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
-    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+# # Unneeded as usage metric does not have uuid attribute yet
+# def usage_metrics(event, context):
+#     method_type = event["routeKey"].split(" ")[0]
+#     uuid = event["rawPath"].split("/")[2]
+#     time_stamp = event["rawPath"].split("/")[3]
+#     start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+#     end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+#     if end_time < start_time:
+#         response = {
+#             "statusCode": 404,
+#             "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+#         }
 
-        return response
+#         return response
 
-    if method_type == "GET":
-        try:
-            usage_info = metrics_controller.get_usage_by_uuid(uuid)
+#     if method_type == "GET":
+#         try:
+#             usage_info = metrics_controller.get_usage_by_uuid(uuid)
 
-            response = {
-                "statusCode": 200,
-                "body": json.dumps(usage_info)
-            }
+#             response = {
+#                 "statusCode": 200,
+#                 "body": json.dumps(usage_info)
+#             }
 
-            return response
+#             return response
 
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
-            }
+#         except Exception as e:
+#             response = {
+#                 "statusCode": 404,
+#                 "body": json.dumps({"detail": "Bin not found"})
+#             }
 
-            return response
+#             return response
 
-# Unneeded as weight metric does not have uuid attribute yet
-def weight_metrics(event, context):
-    method_type = event["routeKey"].split(" ")[0]
-    uuid = event["rawPath"].split("/")[2]
-    time_stamp = event["rawPath"].split("/")[3]
-    start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
-    end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
+# # Unneeded as weight metric does not have uuid attribute yet
+# def weight_metrics(event, context):
+#     method_type = event["routeKey"].split(" ")[0]
+#     uuid = event["rawPath"].split("/")[2]
+#     time_stamp = event["rawPath"].split("/")[3]
+#     start_time = datetime.strptime(time_stamp[17:26], "%y-%m-%d %H-%M-%S")
+#     end_time = datetime.strptime(time_stamp[42:], "%y-%m-%d %H-%M-%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+#     if end_time < start_time:
+#         response = {
+#             "statusCode": 404,
+#             "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
+#         }
 
-        return response
+#         return response
 
-    if method_type == "GET":
-        try:
-            weight_info = metrics_controller.get_weight_by_uuid(uuid)
+#     if method_type == "GET":
+#         try:
+#             weight_info = metrics_controller.get_weight_by_uuid(uuid)
 
-            response = {
-                "statusCode": 200,
-                "body": json.dumps(weight_info)
-            }
+#             response = {
+#                 "statusCode": 200,
+#                 "body": json.dumps(weight_info)
+#             }
 
-            return response
+#             return response
             
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
-            }
+#         except Exception as e:
+#             response = {
+#                 "statusCode": 404,
+#                 "body": json.dumps({"detail": "Bin not found"})
+#             }
 
-            return response
-'''
+#             return response

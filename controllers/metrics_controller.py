@@ -59,47 +59,45 @@ def get_weight_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime, 
         raise Exception
 
 
-# Unneeded functions as of right now
-'''
-# Unneeded as fullness metric does not have uuid attribute yet
-def get_fullness_by_uuid(uuid: str) -> FullnessMetric:
-    query_result = session.query(FullnessMetric).filter_by(uuid=uuid).first()
+# # Unneeded functions as of right now
+# # Unneeded as fullness metric does not have uuid attribute yet
+# def get_fullness_by_uuid(uuid: str) -> FullnessMetric:
+#     query_result = session.query(FullnessMetric).filter_by(uuid=uuid).first()
     
-    if query_result:
+#     if query_result:
 
-        return {
-            "fullness": query_result.fullness,
-            "timestamp": query_result.timestamp
-        }
+#         return {
+#             "fullness": query_result.fullness,
+#             "timestamp": query_result.timestamp
+#         }
 
-    else:
-        raise Exception
+#     else:
+#         raise Exception
 
-# Unneeded as usage metric does not have uuid attribute yet
-def get_usage_by_uuid(uuid: str) -> UsageMetric:
-    query_result = session.query(UsageMetric).filter_by(uuid=uuid).first()
+# # Unneeded as usage metric does not have uuid attribute yet
+# def get_usage_by_uuid(uuid: str) -> UsageMetric:
+#     query_result = session.query(UsageMetric).filter_by(uuid=uuid).first()
     
-    if query_result:
+#     if query_result:
         
-        return {
-            "usage": query_result.used_rate,
-            "timestamp": query_result.timestamp
-        }
+#         return {
+#             "usage": query_result.used_rate,
+#             "timestamp": query_result.timestamp
+#         }
 
-    else:
-        raise Exception
+#     else:
+#         raise Exception
 
-# Unneeded as weight metric does not have uuid attribute yet
-def get_weight_by_uuid(uuid: str) -> WeightMetric:
-    query_result = session.query(WeightMetric).filter_by(uuid=uuid).first()
+# # Unneeded as weight metric does not have uuid attribute yet
+# def get_weight_by_uuid(uuid: str) -> WeightMetric:
+#     query_result = session.query(WeightMetric).filter_by(uuid=uuid).first()
     
-    if query_result:
+#     if query_result:
         
-        return {
-            "weight": query_result.weight,
-            "timestamp": query_result.timestamp
-        }
+#         return {
+#             "weight": query_result.weight,
+#             "timestamp": query_result.timestamp
+#         }
         
-    else:
-        raise Exception
-'''
+#     else:
+#         raise Exception

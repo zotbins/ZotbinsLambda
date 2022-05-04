@@ -130,30 +130,28 @@ functions:
           method: get
 
 
-# Unneeded as of right now
-'''
-  # Unneeded as fullness metric does not have uuid attribute yet
-  fullness_metrics:
-    handler: handler.fullness_metrics
-    events:
-      - httpApi:
-          path: /bin/{UUID}/fullness
-          method: get
-  # Unneeded as usage metric does not have uuid attribute yet
-  usage_metrics:
-    handler: handler.usage_metrics
-    events:
-      - httpApi:
-          path: /bin/{UUID}/usage
-          method: get
-  # Unneeded as weight metric does not have uuid attribute yet
-  weight_metrics:
-    handler: handler.weight_metrics
-    events:
-      - httpApi:
-          path: /bin/{UUID}/weight
-          method: get
-'''
+# # Unneeded as of right now
+#   # Unneeded as fullness metric does not have uuid attribute yet
+#   fullness_metrics:
+#     handler: handler.fullness_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/fullness
+#           method: get
+#   # Unneeded as usage metric does not have uuid attribute yet
+#   usage_metrics:
+#     handler: handler.usage_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/usage
+#           method: get
+#   # Unneeded as weight metric does not have uuid attribute yet
+#   weight_metrics:
+#     handler: handler.weight_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/weight
+#           method: get
 
 
 #    The following are a few example events you can configure
