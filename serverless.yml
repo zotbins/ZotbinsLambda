@@ -92,6 +92,66 @@ functions:
       - httpApi:
           path: /bin/{UUID}/location
           method: put
+  all_fullness_metrics:
+    handler: handler.all_fullness_metrics
+    events:
+      - httpApi:
+          path: /fullness_metrics
+          method: get
+  all_usage_metrics:
+    handler: handler.all_usage_metrics
+    events:
+      - httpApi:
+          path: /usage_metrics
+          method: get
+  all_weight_metrics:
+    handler: handler.all_weight_metrics
+    events:
+      - httpApi:
+          path: /weight_metrics
+          method: get
+  filter_fullness_metrics:
+    handler: handler.filter_fullness_metrics
+    events:
+      - httpApi:
+          path: /fullness_metrics/{sensor_id}
+          method: get
+  filter_usage_metrics:
+    handler: handler.filter_usage_metrics
+    events:
+      - httpApi:
+          path: /usage_metrics/{sensor_id}
+          method: get
+  filter_weight_metrics:
+    handler: handler.filter_weight_metrics
+    events:
+      - httpApi:
+          path: /weight_metrics/{sensor_id}
+          method: get
+
+
+# # Unneeded as of right now
+#   # Unneeded as fullness metric does not have uuid attribute yet
+#   fullness_metrics:
+#     handler: handler.fullness_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/fullness
+#           method: get
+#   # Unneeded as usage metric does not have uuid attribute yet
+#   usage_metrics:
+#     handler: handler.usage_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/usage
+#           method: get
+#   # Unneeded as weight metric does not have uuid attribute yet
+#   weight_metrics:
+#     handler: handler.weight_metrics
+#     events:
+#       - httpApi:
+#           path: /bin/{UUID}/weight
+#           method: get
 
 
 #    The following are a few example events you can configure
