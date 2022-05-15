@@ -1,7 +1,7 @@
 from controllers.session_controller import session
 from models.db_models import BinInfo
 
-from utils import encoder
+from utils import encoder, errors
 
 
 def get_bin_by_uuid(uuid: str) -> BinInfo:
@@ -38,14 +38,14 @@ def delete_bin_by_uuid(uuid: str) -> None:
         session.delete(query_result)
         session.commit()
     else:
-        raise Exception
+        raise errors.BinNotFoundException
 
 
-def get_all_bins() -> [dict]:
+def get_all_bins() -> list[dict]:
     """
     Returns
     -------
-    Returns a list of dictionaries: [dict]
+    Returns a list of dictionaries: list[dict]
         Each dictionary contains a bin's attributes
     """
     query_result = session.query(BinInfo).all()
@@ -75,7 +75,7 @@ def get_bin_location(uuid: str) -> dict:
             "longitude": query_result.lon
         }
     else:
-        raise Exception
+        raise errors.BinNotFoundException
 
 
 def update_bin_location(uuid: str, new_lat: float, new_lon: float) -> None:
@@ -103,4 +103,4 @@ def update_bin_location(uuid: str, new_lat: float, new_lon: float) -> None:
         session.add(query_result)
         session.commit()
     else:
-        raise Exception
+        raise errors.BinNotFoundException

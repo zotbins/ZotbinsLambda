@@ -1,12 +1,12 @@
 from models.db_models import BinInfo, FullnessMetric, UsageMetric, WeightMetric
 from datetime import datetime
 
-def encode_bin_info_list(bins: [BinInfo]) -> None:
+def encode_bin_info_list(bins: list[BinInfo]) -> None:
     """
     Encodes each bin into a dictionary containing its attributes
     Parameters
     ----------
-    bins: [BinInfo]
+    bins: list[BinInfo]
         List of bins to encode
     Returns
     -------

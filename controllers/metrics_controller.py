@@ -2,7 +2,7 @@ from controllers.session_controller import session
 from models.db_models import FullnessMetric, UsageMetric, WeightMetric
 from datetime import datetime
 
-from utils import encoder
+from utils import encoder, errors
 
 
 def get_all_fullness() -> None:
@@ -34,7 +34,7 @@ def get_fullness_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime
         encoder.encode_fullness_info_list(query_result)
         return query_result
     else:
-        raise Exception
+        raise errors.InvalidSensorIdException
 
 
 def get_usage_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime, end_time: datetime) -> UsageMetric:
@@ -45,7 +45,7 @@ def get_usage_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime, e
         encoder.encode_usage_info_list(query_result)
         return query_result
     else:
-        raise Exception
+        raise errors.InvalidSensorIdException
 
 
 def get_weight_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime, end_time: datetime) -> WeightMetric:
@@ -56,7 +56,7 @@ def get_weight_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime, 
         encoder.encode_weight_info_list(query_result)
         return query_result
     else:
-        raise Exception
+        raise errors.InvalidSensorIdException
 
 
 # # Unneeded functions as of right now
