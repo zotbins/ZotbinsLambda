@@ -183,6 +183,17 @@ def location(event, context):
 
 
 def all_fullness_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all fullness metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all fullness metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -197,6 +208,17 @@ def all_fullness_metrics(event, context):
 
 
 def all_usage_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all usage metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all usage metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -211,6 +233,17 @@ def all_usage_metrics(event, context):
 
 
 def all_weight_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all weight metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all weight metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -225,6 +258,20 @@ def all_weight_metrics(event, context):
 
 
 def filter_fullness_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves fullness metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains fullness metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
@@ -262,6 +309,20 @@ def filter_fullness_metrics(event, context):
 
 
 def filter_usage_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves usage metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains usage metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
@@ -299,6 +360,20 @@ def filter_usage_metrics(event, context):
 
 
 def filter_weight_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves weight metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains weight metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
