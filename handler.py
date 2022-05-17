@@ -87,6 +87,16 @@ def bin(event, context):
             }
 
             return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def bins(event, context):
@@ -119,6 +129,16 @@ def bins(event, context):
         # TODO: Figure out how to get request body
         print(event["body"])
         pass
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def location(event, context):
@@ -180,6 +200,16 @@ def location(event, context):
             }
 
             return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def all_fullness_metrics(event, context):
@@ -205,6 +235,16 @@ def all_fullness_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def all_usage_metrics(event, context):
@@ -230,6 +270,16 @@ def all_usage_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def all_weight_metrics(event, context):
@@ -255,6 +305,16 @@ def all_weight_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def filter_fullness_metrics(event, context):
@@ -295,6 +355,16 @@ def filter_fullness_metrics(event, context):
                     "body": json.dumps({"detail": e.err_msg})
                 }
 
+                return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
                 return response
     else:
         try:
@@ -347,6 +417,16 @@ def filter_usage_metrics(event, context):
                 }
 
                 return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
+                return response
     else:
         try:
             raise errors.InvalidTimestampOrderException
@@ -397,6 +477,16 @@ def filter_weight_metrics(event, context):
                     "body": json.dumps({"detail": e.err_msg})
                 }
 
+                return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
                 return response
     else:
         try:
