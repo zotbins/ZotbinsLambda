@@ -8,13 +8,6 @@ class BinNotFoundException(Exception):
         self.err_msg = "Bin not found!"
         self.err_code = 404
 
-class InvalidMethodException(Exception):
-    '''
-    '''
-    def __init__(self):
-        self.err_msg = ""
-        self.err_code = 405
-
 class InvalidSensorIdException(Exception):
     '''
     InvalidSensorIdException is raised when none of the metrics are assigned to a sensor with the requested 
