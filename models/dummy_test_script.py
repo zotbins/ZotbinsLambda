@@ -7,9 +7,8 @@ from db_models import base, db
 from db_models import BinType, BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
 from db_models import WeightMetric, FullnessMetric, UsageMetric
 from sqlalchemy.orm import sessionmaker
-#from sqlalchemy import datetime and timedelta
+#from sqlalchemy import DateTime
 from datetime import datetime
-from datetime import timedelta
 
 # Generate database schema (place that stores all of the newly created entity objects)
 base.metadata.create_all(db)
@@ -106,62 +105,53 @@ def gen_UsageSensor(ran_id: int, session: Session):
 
 
 # Generates random WeightMetric Object
-def gen_WeightMetric(session: Session, sen_id: int, num_metrics: int):
-    # Generates num_metrics amount of Metrics for the given weight sensor with 30 minute time intervals between said metrics
-    
-    previous_metrics = session.query(WeightMetric).filter_by(sensor_id = sen_id).order_by(WeightMetric.timestamp).all()
+def gen_WeightMetric(id_dict: dict, session: Session, possible_sensors: list):
+    # Generates a random WeightMetric Object for a random corresponding sensor only if there is a possible corresponding sensor
 
-    #print(previous_metrics)
+    if len(possible_sensors) > 0:
+        sen_id = possible_sensors[random.randint(0,len(possible_sensors)-1)]
 
-    if len(previous_metrics) != 0:
-        r_timestamp = previous_metrics[-1].timestamp
-    else:
-        r_timestamp = datetime.now()
-
-    for i in range(num_metrics):
+        ran_id = _gen_id(id_dict)
         r_weight = random.uniform(0,50)
-        r_timestamp += timedelta(minutes = 30)
-        new_weight_metric = WeightMetric(weight = r_weight, timestamp = r_timestamp, sensor_id = sen_id)
+        r_timestamp = datetime.now()
+        
+        new_weight_metric = WeightMetric(id = ran_id, weight = r_weight, timestamp = r_timestamp, sensor_id = sen_id)
         session.add(new_weight_metric)
-    
+        id_dict[ran_id] = type(new_weight_metric)
+
 
 
 # Generates random FullnessMetric Object
-def gen_FullnessMetric(session: Session, sen_id: int, num_metrics: int):
-    # Generates num_metrics amount of Metrics for the given fullness sensor with 30 minute time intervals between said metrics
-       
-    previous_metrics = session.query(FullnessMetric).filter_by(sensor_id = sen_id).order_by(FullnessMetric.timestamp).all()
+def gen_FullnessMetric(id_dict: dict, session: Session, possible_sensors: list):
+    # Generates a random WeightMetric Object for a random corresponding sensor only if there is a possible corresponding sensor
 
-    if len(previous_metrics) != 0:
-        r_timestamp = previous_metrics[-1].timestamp
-    else:
-        r_timestamp = datetime.now()
+    if len(possible_sensors) > 0:
+        sen_id = possible_sensors[random.randint(0,len(possible_sensors)-1)]
 
-    for i in range(num_metrics):
+        ran_id = _gen_id(id_dict)
         r_fullness = random.randint(0,100)
-        r_timestamp += timedelta(minutes = 30)
-        new_fullness_metric = FullnessMetric(fullness = r_fullness, timestamp = r_timestamp, sensor_id = sen_id)
+        r_timestamp = datetime.now()
+        
+        new_fullness_metric = FullnessMetric(id = ran_id, fullness = r_fullness, timestamp = r_timestamp, sensor_id = sen_id)
         session.add(new_fullness_metric)
-    
+        id_dict[ran_id] = type(new_fullness_metric)
 
 
 
 # Generates random UsageMetric Object
-def gen_UsageMetric(session: Session, sen_id: int, num_metrics: int):
-    # Generates num_metrics amount of Metrics for the given usage sensor with 30 minute time intervals between said metrics
-       
-    previous_metrics = session.query(UsageMetric).filter_by(sensor_id = sen_id).order_by(UsageMetric.timestamp).all()
+def gen_UsageMetric(id_dict: dict, session: Session, possible_sensors: list):
+    # Generates a random WeightMetric Object for a random corresponding sensor only if there is a possible corresponding sensor
 
-    if len(previous_metrics) != 0:
-        r_timestamp = previous_metrics[-1].timestamp
-    else:  
+    if len(possible_sensors) > 0:
+        sen_id = possible_sensors[random.randint(0,len(possible_sensors)-1)]
+
+        ran_id = _gen_id(id_dict)
+        r_used_rate = random.randint(0,20)
         r_timestamp = datetime.now()
 
-    for i in range(num_metrics):
-        r_used_rate = random.randint(0,20)
-        r_timestamp += timedelta(minutes = 30)
-        new_usage_metric = UsageMetric(used_rate = r_used_rate, timestamp = r_timestamp, sensor_id = sen_id)
+        new_usage_metric = UsageMetric(id = ran_id, used_rate = r_used_rate, timestamp = r_timestamp, sensor_id = sen_id)
         session.add(new_usage_metric)
+        id_dict[ran_id] = type(new_usage_metric)
 
 
 
@@ -190,40 +180,26 @@ def _gen_id(id_dict: dict):
 
 
 if __name__ == '__main__':
-    
-    
+ 
     # Puts all the possible ID's in a dictionary whose value is its associated object
     id_dict = dict()
-    #for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor,WeightMetric,FullnessMetric,UsageMetric]: _get_ids(id_dict, entity, session)
-    for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor]: _get_ids(id_dict, entity, session)
-    
+    for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor,WeightMetric,FullnessMetric,UsageMetric]: _get_ids(id_dict, entity, session)
 
     #Generates Random Bin
     if input('Would you like to create a new bin, which is 3 BinInfo objects and 9 sensor objects? (type yes for yes, anything else for no): ') == "yes":
         gen_Bin(id_dict, session)
 
-    
     #Gathers possible Usage, Weight, and Fullness Sensors
     fullness_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == FullnessSensor] 
     usage_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == UsageSensor]
     weight_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == WeightSensor]
-    
-
-    #Asks user how much metric data they would like to create
-    num_data = int(input("How much metric data would you like to create for EACH sensor? "))
-
-    #Generates data for ALL SENSORS given the user inputted ammount
-    for f_sensor_id in fullness_sensors:
-        gen_FullnessMetric(session, f_sensor_id, num_data)
-    
-    for u_sensor_id in usage_sensors:
-        gen_UsageMetric(session, u_sensor_id, num_data)
-    
-    for w_sensor_id in weight_sensors:
-        gen_WeightMetric(session, w_sensor_id, num_data)
 
 
-
+    #Generates 5 pieces of random weight metric data
+    for _ in range(5):
+        gen_WeightMetric(id_dict, session, weight_sensors)
+        gen_UsageMetric(id_dict, session, usage_sensors)
+        gen_FullnessMetric(id_dict, session, fullness_sensors)
 
     # Commit and close session
     session.commit()
