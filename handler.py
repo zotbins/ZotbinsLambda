@@ -1,7 +1,7 @@
 import json
 from controllers import bin_controller, metrics_controller
 from datetime import datetime
-from utils import encoder
+from utils import encoder, errors
 
 
 def hello(event, context):
@@ -78,14 +78,24 @@ def bin(event, context):
             }
 
             return response
-        except Exception as e:
+        except errors.BinNotFoundException as e:
             print(f"e: {e}")
 
             response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
+            return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
             return response
 
 
@@ -119,6 +129,16 @@ def bins(event, context):
         # TODO: Figure out how to get request body
         print(event["body"])
         pass
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def location(event, context):
@@ -155,10 +175,10 @@ def location(event, context):
             }
 
             return response
-        except Exception as e:
+        except errors.BinNotFoundException as e:
             response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
             return response
@@ -172,17 +192,38 @@ def location(event, context):
             }
 
             return response
-        except Exception as e:
+        except errors.BinNotFoundException as e:
             # TODO: refactor statuscode 404 response as a function
             response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
+            return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
             return response
 
 
 def all_fullness_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all fullness metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all fullness metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -194,9 +235,30 @@ def all_fullness_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def all_usage_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all usage metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all usage metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -208,9 +270,30 @@ def all_usage_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def all_weight_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves all weight metrics
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains all weight metrics
+    """
     method_type = event["routeKey"].split(" ")[0]
 
     if method_type == "GET":
@@ -222,105 +305,196 @@ def all_weight_metrics(event, context):
         }
 
         return response
+    else:
+        try:
+            raise errors.InvalidRestMethodException
+        except errors.InvalidRestMethodException as e:
+            response = {
+                "statusCode": e.err_code,
+                "body": json.dumps({"details": e.err_msg})
+            }
+            
+            return response
 
 
 def filter_fullness_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves fullness metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains fullness metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
     start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
     end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+    if start_time < end_time:
+        if method_type == "GET":
+            try:
+                fullness_info = metrics_controller.get_fullness_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
 
-        return response
+                response = {
+                    "statusCode": 200,
+                    "body": json.dumps(fullness_info)
+                }
 
-    if method_type == "GET":
+                return response
+            except errors.InvalidSensorIdException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"detail": e.err_msg})
+                }
+
+                return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
+                return response
+    else:
         try:
-            fullness_info = metrics_controller.get_fullness_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
-
+            raise errors.InvalidTimestampOrderException
+        except errors.InvalidTimestampOrderException as e:
             response = {
-                "statusCode": 200,
-                "body": json.dumps(fullness_info)
-            }
-
-            return response
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
             return response
 
 
 def filter_usage_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves usage metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains usage metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
     start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
     end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+    if start_time < end_time:
+        if method_type == "GET":
+            try:
+                usage_info = metrics_controller.get_usage_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
 
-        return response
+                response = {
+                    "statusCode": 200,
+                    "body": json.dumps(usage_info)
+                }
 
-    if method_type == "GET":
+                return response
+            except errors.InvalidSensorIdException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"detail": e.err_msg})
+                }
+
+                return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
+                return response
+    else:
         try:
-            usage_info = metrics_controller.get_usage_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
-
+            raise errors.InvalidTimestampOrderException
+        except errors.InvalidTimestampOrderException as e:
             response = {
-                "statusCode": 200,
-                "body": json.dumps(usage_info)
-            }
-
-            return response
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
             return response
 
 
 def filter_weight_metrics(event, context):
+    """
+    Request type
+    ------------
+    GET
+    ---
+        Retrieves weight metrics filtered by their sensor id and timestamp attributes
+        If start timestamp occurs after end timestamp, returns error message
+        If sensor id doesn't exist, returns error message
+        Returns
+        -------
+        Returns a json encoded dict: dict
+            Contains weight metrics filtered by their sensor id and timestamp attributes 
+                if start timestamp occurs before end timestamp and sensor id exists, else error message
+    """
     method_type = event["routeKey"].split(" ")[0]
     sensor_id = event["rawPath"].split("/")[2]
     timestamp = event["rawQueryString"].split("&")
     start_time = datetime.strptime(timestamp[0][18:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
     end_time = datetime.strptime(timestamp[1][16:].replace("%3A", ":").replace("+", " "), "%y-%m-%d %H:%M:%S")
 
-    if end_time < start_time:
-        response = {
-            "statusCode": 404,
-            "body": json.dumps({"detail": "Start timestamp occurs after end timestamp"})
-        }
+    if start_time < end_time:
+        if method_type == "GET":
+            try:
+                weight_info = metrics_controller.get_weight_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
 
-        return response
+                response = {
+                    "statusCode": 200,
+                    "body": json.dumps(weight_info)
+                }
 
-    if method_type == "GET":
+                return response
+            except errors.InvalidSensorIdException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"detail": e.err_msg})
+                }
+
+                return response
+        else:
+            try:
+                raise errors.InvalidRestMethodException
+            except errors.InvalidRestMethodException as e:
+                response = {
+                    "statusCode": e.err_code,
+                    "body": json.dumps({"details": e.err_msg})
+                }
+                
+                return response
+    else:
         try:
-            weight_info = metrics_controller.get_weight_by_sensor_id_and_timestamp(sensor_id, start_time, end_time)
-
+            raise errors.InvalidTimestampOrderException
+        except errors.InvalidTimestampOrderException as e:
             response = {
-                "statusCode": 200,
-                "body": json.dumps(weight_info)
-            }
-
-            return response
-        except Exception as e:
-            response = {
-                "statusCode": 404,
-                "body": json.dumps({"detail": "Bin not found"})
+                "statusCode": e.err_code,
+                "body": json.dumps({"detail": e.err_msg})
             }
 
             return response
