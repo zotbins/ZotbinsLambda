@@ -65,12 +65,12 @@ class WeightSensor(base):
 
 class WeightMetric(base):
     __tablename__ = "weight_metric"
-    timestamp = Column(DateTime)
+    timestamp = Column(DateTime, primary_key=True)
     weight = Column(Integer)
 
     # One to Many relationship with WeightSensor
-    id = Column(Integer, primary_key=True)
     sensor_id = Column(Integer, ForeignKey("weight_sensor.sensor_id"))
+
 
 
 class FullnessSensor(base):
@@ -89,11 +89,10 @@ class FullnessSensor(base):
 
 class FullnessMetric(base):
     __tablename__ = "fullness_metric"
-    timestamp = Column(DateTime)
+    timestamp = Column(DateTime, primary_key=True)
     fullness = Column(Integer)
 
     # One to Many relationship with FullnessSensor
-    id = Column(Integer, primary_key=True)
     sensor_id = Column(Integer, ForeignKey("fullness_sensor.sensor_id"))
 
 
@@ -111,9 +110,8 @@ class UsageSensor(base):
 
 class UsageMetric(base):
     __tablename__ = "usage_metric"
-    timestamp = Column(DateTime)
+    timestamp = Column(DateTime, primary_key=True)
     used_rate = Column(Float)
 
     # One to Many relationship with UsageSensor
-    id = Column(Integer, primary_key=True)
     sensor_id = Column(Integer, ForeignKey("usage_sensor.sensor_id"))
