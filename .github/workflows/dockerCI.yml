@@ -1,0 +1,36 @@
+name: Docker CI
+
+on:
+  status:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create a TimescaleDB docker instance and start it
+      run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
+
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 #install the python version needed
+        
+    - name: install necessary python modules
+      run: pip install -r requirements.txt
+      
+    - name: execute dummy data script #inserts data
+      run: |
+        python models/dummy_test_script.py
+    
+    - name: run tests
+      run: |
+        python models/db_models_test.py
