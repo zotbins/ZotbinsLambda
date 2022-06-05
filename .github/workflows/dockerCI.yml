@@ -1,4 +1,4 @@
-name: Docker CI
+name: Docker Image CI
 
 on:
   push:
@@ -20,14 +20,14 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8 #install the python version needed
-        
+
     - name: install necessary python modules
       run: pip install -r requirements.txt
-      
+
     - name: execute dummy data script #inserts data
       run: |
-        python models/dummy_test_script.py
-    
+        python models/ci_test_script.py
+
     - name: run tests
       run: |
-        python models/db_models_test.py
+        python models/ci_test_script_tests.py
