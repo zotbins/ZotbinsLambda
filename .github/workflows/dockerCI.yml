@@ -14,8 +14,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Create a TimescaleDB docker instance and start it
+    - name: Create a TimescaleDB docker instance
       run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
+
+    - name: Starting TimescaleDB docker instance
+      run: sls offline
 
     - name: setup python
       uses: actions/setup-python@v2
