@@ -31,4 +31,4 @@ jobs:
 
     - name: tests the bin endpoints
       run: |
-        python tests/test_bin_endpoints
+        python tests/test_bin_endpoints.py
