@@ -1,2 +1,4 @@
 sqlalchemy==1.4.32
 psycopg2-binary==2.9.3
+nanoid~=2.0.0
+requests~=2.28.1

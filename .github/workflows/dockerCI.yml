@@ -1,5 +1,6 @@
 name: Docker Image CI
 
+#maybe add branch filter
 on:
   push:
   pull_request:
@@ -24,10 +25,10 @@ jobs:
     - name: install necessary python modules
       run: pip install -r requirements.txt
 
-    - name: execute dummy data script #inserts data
+    - name: setup test database with test data
       run: |
-        python models/ci_test_script.py
+        python tests/setup_database.py
 
-    - name: run tests
+    - name: tests the bin endpoints
       run: |
-        python models/ci_test_script_tests.py
+        python tests/test_bin_endpoints
