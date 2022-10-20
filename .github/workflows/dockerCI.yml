@@ -17,7 +17,10 @@ jobs:
     - name: Create a TimescaleDB docker instance
       run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
 
-    - name: Starting TimescaleDB docker instance
+    - name: Start TimescaleDB docker instance
+      run: docker start timescaledb
+
+    - name: Start Serverless
       run: sls offline
 
     - name: setup python
