@@ -9,7 +9,7 @@ from setup_database import session
 def run_basic_bin_get_test():
     trash_bin = session.query(BinInfo).filter_by(bin_type=BinType.T).first()
 
-    trash_bin_request = GET("http://localhost:3000", f"bin/{trash_bin.uuid}")
+    trash_bin_request = GET("http://localhost:5432", f"bin/{trash_bin.uuid}")
 
     assert(trash_bin.__dict__["id"] == trash_bin_request["id"])
     assert(trash_bin.__dict__["uuid"] == trash_bin_request["uuid"])
