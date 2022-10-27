@@ -26,6 +26,10 @@ provider:
   name: aws
   runtime: python3.8
   lambdaHashingVersion: 20201221
+  deploymentMethod: direct
+  region: us-west-2
+
+
 
 # you can overwrite defaults here
 #  stage: dev
