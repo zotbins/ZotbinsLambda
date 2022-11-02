@@ -1,7 +1,7 @@
 from models.db_models import BinInfo, FullnessMetric, UsageMetric, WeightMetric
 from datetime import datetime
 
-def encode_bin_info_list(bins: "list[BinInfo]") -> None:
+def encode_bin_info_list(bins: list[BinInfo]) -> None:
     """
     Encodes each bin into a dictionary containing its attributes
     Parameters
@@ -40,7 +40,7 @@ def encode_bin_info(bin: BinInfo) -> dict:
         "bin_type": bin.bin_type.name
     }
 
-def encode_fullness_info_list(fullnesses: "list[FullnessMetric]") -> None:
+def encode_fullness_info_list(fullnesses: list[FullnessMetric]) -> None:
     """
     Encodes each fullness metric into a dictionary containing its attributes
     Parameters
@@ -78,7 +78,7 @@ def encode_fullness_info(fullness: FullnessMetric) -> dict:
         "sensor_id": fullness.sensor_id
     }
 
-def encode_usage_info_list(usages: "list[UsageMetric]") -> None:
+def encode_usage_info_list(usages: list[UsageMetric]) -> None:
     """
     Encodes each usage metric into a dictionary containing its attributes
     Parameters
@@ -116,7 +116,7 @@ def encode_usage_info(usage: UsageMetric) -> dict:
         "sensor_id": usage.sensor_id
     }
 
-def encode_weight_info_list(weights: "list[WeightMetric]") -> None:
+def encode_weight_info_list(weights: list[WeightMetric]) -> None:
     """
     Encodes each weight metric into a dictionary containing its attributes
     Parameters
