@@ -17,9 +17,6 @@ jobs:
     - name: Create a TimescaleDB docker instance
       run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
 
-    - name: Start TimescaleDB docker instance
-      run: docker start timescaledbci
-
     - name: setup python
       uses: actions/setup-python@v2
       with:
@@ -32,6 +29,7 @@ jobs:
       run: |
         python tests/setup_database.py
 
-    - name: tests the bin endpoints
+    # unit tests
+    - name: tests the bin controller
       run: |
-        python tests/test_bin_endpoints.py
+        python tests/unit_tests/test_bin_controller.py
