@@ -224,7 +224,7 @@ if __name__ == '__main__':
     
 
     #Asks user how much metric data they would like to create
-    num_data = 100
+    num_data = 10
 
     #Generates data for ALL SENSORS
     for f_sensor_id in fullness_sensors:
