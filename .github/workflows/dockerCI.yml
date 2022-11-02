@@ -19,8 +19,8 @@ jobs:
 
     - name: setup python
       uses: actions/setup-python@v4
-      with:
-        python-version: 3.10 #install the python version needed
+      # with:
+      #   python-version: 3.10 #install the python version needed
 
     - name: install necessary python modules
       run: pip install -r requirements.txt
