@@ -25,8 +25,8 @@ def run_basic_bin_controller_query():
     test_bin = session.query(BinInfo).first()
     controller_bin = get_bin_by_uuid(test_bin.uuid)
 
-    for attribute in test_bin.__dict__:
-        assert test_bin.__dict__[attribute] == controller_bin.__dict__[attribute], "Asserts that each bin attribute is the same"
+    for attribute in ["uuid", "lat", "lon", "bin_type", "id"]:
+        assert eval(f"test_bin.{attribute}") == eval(f"controller_bin.{attribute}"), f"Asserts that {attribute} is the same; test_bin: {test_bin.__dict__[attribute]}, controller_bin: {controller_bin.__dict__[attribute]}"
 
 if __name__ == "__main__":
     run_basic_bin_controller_query()
