@@ -17,7 +17,7 @@ sys.path.append(parent)
 
 from setup_database import BinInfo, BinType
 from setup_database import session
-from controllers.bin_controller import *
+from controllers.bin_controller import get_bin_by_uuid
 
 def run_basic_bin_controller_query():
     # Tests that the controller correctly querries
