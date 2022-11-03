@@ -1,10 +1,26 @@
+
+
 import random
 from nanoid import generate
-import sys
 
-from db_models import base, db
-from db_models import BinType, BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
-from db_models import WeightMetric, FullnessMetric, UsageMetric
+import sys
+import os
+ 
+# getting the name of the directory
+# where the this file is present.
+current = os.path.dirname(os.path.realpath(__file__))
+ 
+# Getting the parent directory name
+# where the current directory is present.
+parent = os.path.dirname(current)
+ 
+# adding the parent directory to
+# the sys.path.
+sys.path.append(parent)
+
+from models.db_models import base, db
+from models.db_models import BinType, BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
+from models.db_models import WeightMetric, FullnessMetric, UsageMetric
 from sqlalchemy.orm import sessionmaker
 #from sqlalchemy import datetime and timedelta
 from datetime import datetime
@@ -197,9 +213,8 @@ if __name__ == '__main__':
     for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor]: _get_ids(id_dict, entity, session)
     
 
-    #Generates Random Bin
-    if input('Would you like to create a new bin, which is 3 BinInfo objects and 9 sensor objects? (type yes for yes, anything else for no): ') == "yes":
-        gen_Bin(id_dict, session)
+    #Generates Bins
+    gen_Bin(id_dict, session)
 
     
     #Gathers possible Usage, Weight, and Fullness Sensors
@@ -209,9 +224,9 @@ if __name__ == '__main__':
     
 
     #Asks user how much metric data they would like to create
-    num_data = int(input("How much metric data would you like to create for EACH sensor? "))
+    num_data = 10
 
-    #Generates data for ALL SENSORS given the user inputted ammount
+    #Generates data for ALL SENSORS
     for f_sensor_id in fullness_sensors:
         gen_FullnessMetric(session, f_sensor_id, num_data)
     
