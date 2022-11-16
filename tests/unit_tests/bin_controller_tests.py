@@ -16,8 +16,11 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 from setup_database import BinInfo, BinType, Sensor
+from setup_database import session as test_session
+import controllers.session_controller
+controllers.session_controller.session = test_session
+
 from controllers.bin_controller import *
-from setup_database import session
 
 def run_basic_bin_controller_query():
     # Tests that the controller correctly querries
