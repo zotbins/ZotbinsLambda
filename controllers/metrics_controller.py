@@ -60,7 +60,10 @@ def get_fullness_by_sensor_id_and_timestamp(sensor_id: str, start_time: datetime
     Returns a FullnessMetric object: FullnessMetric
         FullnessMetric object associated with the sensor id and range of timestamps
     """
+    print()
+    print("TESTING 2")
     print(sensor_id)
+    print()
     query_result = session.query(FullnessMetric).filter(FullnessMetric.sensor_id == sensor_id, \
             FullnessMetric.timestamp >= start_time, \
             FullnessMetric.timestamp <= end_time).all()
