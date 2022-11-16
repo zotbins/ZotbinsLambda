@@ -28,6 +28,10 @@ jobs:
     - name: setup test database with test data
       run: |
         python tests/setup_database.py
+    
+    - name: for testing purposes
+      run: |
+        python tests/dummy_test_print.py
 
     # unit tests
     - name: tests the metrics controller
