@@ -18,13 +18,17 @@ parent = os.path.dirname(current)
 # the sys.path.
 sys.path.append(parent)
 
-from models.db_models import base, db
+from models.db_models import base
 from models.db_models import BinType, BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor 
 from models.db_models import WeightMetric, FullnessMetric, UsageMetric
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
 #from sqlalchemy import datetime and timedelta
 from datetime import datetime
 from datetime import timedelta
+
+
+db = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 
 # Generate database schema (place that stores all of the newly created entity objects)
 base.metadata.create_all(db)

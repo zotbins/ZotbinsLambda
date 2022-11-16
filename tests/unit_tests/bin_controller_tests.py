@@ -16,8 +16,8 @@ parent = os.path.dirname(current)
 sys.path.append(parent)
 
 from setup_database import BinInfo, BinType, Sensor
-from setup_database import session
 from controllers.bin_controller import *
+from setup_database import session
 
 def run_basic_bin_controller_query():
     # Tests that the controller correctly querries
@@ -37,6 +37,29 @@ def run_basic_bin_controller_query_all():
     num_bins_controller = len(get_all_bins())
 
     assert num_bins == num_bins_controller, "Asserts that the correct number of bins are returned by get_all_bins"
+
+
+def run_basic_bin_controller_get_bin_location():
+    # Tests that the controller correctly gets
+    # the correct location of a bin
+    test_bin = session.query(BinInfo).first()
+    controller_bin = get_bin_location(test_bin.uuid)
+
+    assert test_bin.__dict__["lat"] == controller_bin["latitude"], "Asserts that the bin location has the correct lattitude"
+    assert test_bin.__dict__["lon"] == controller_bin["longitude"], "Asserts that the bin location has the correct lattitude"
+
+
+
+def run_basic_bin_controller_update_bin_location():
+    # Tests that the controller correctly updates
+    # a bin's location
+    test_bin = session.query(BinInfo).first()
+    update_bin_location(test_bin.uuid, -1, -1)
+    test_bin = session.query(BinInfo).filter_by(uuid=test_bin.uuid).first()
+    controller_bin = get_bin_location(test_bin.uuid)
+    assert test_bin.__dict__["lat"] == controller_bin["latitude"], "Asserts that the bin location has the correct lattitude"
+    assert test_bin.__dict__["lon"] == controller_bin["longitude"], "Asserts that the bin location has the correct lattitude"
+
 
 
 def run_basic_bin_controller_delete():
@@ -59,4 +82,6 @@ def run_basic_bin_controller_delete():
 if __name__ == "__main__":
     run_basic_bin_controller_query()
     run_basic_bin_controller_query_all()
+    run_basic_bin_controller_get_bin_location()
+    run_basic_bin_controller_update_bin_location()
     run_basic_bin_controller_delete()

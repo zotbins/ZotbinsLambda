@@ -30,6 +30,11 @@ jobs:
         python tests/setup_database.py
 
     # unit tests
+    - name: tests the metrics controller
+      run: |
+        python tests/unit_tests/metrics_controller_tests.py
+
     - name: tests the bin controller
       run: |
-        python tests/unit_tests/test_bin_controller.py
+        python tests/unit_tests/bin_controller_tests.py
+    
