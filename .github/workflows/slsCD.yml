@@ -23,7 +23,7 @@ jobs:
     #   run: cd ./ZotbinsLambda
 
     - name: serverless deploy
-      uses: serverless/github-action@v3.1
+      uses: serverless/github-action@master
       with:
         args: deploy
       env:
