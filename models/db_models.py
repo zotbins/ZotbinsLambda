@@ -1,13 +1,10 @@
 import enum
 
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
-db = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 base = declarative_base()
-
 
 class BinType(enum.Enum):
     T = "TRASH"
@@ -26,7 +23,7 @@ class BinInfo(base):
     id = Column(Integer, primary_key=True)
 
     # One to Many relationship with Sensor
-    sensors = relationship("Sensor")
+    sensors = relationship("Sensor", cascade="all, delete-orphan")
 
 
 
@@ -43,9 +40,9 @@ class Sensor(base):
     waste_bin_id = Column(Integer, ForeignKey("bin_info.id"))
 
     # One to One relationship with sensors
-    weight_sensor = relationship("WeightSensor", back_populates ='sensor', uselist = False)
-    fullness_sensor = relationship("FullnessSensor", back_populates ='sensor', uselist = False)
-    usage_sensor = relationship("UsageSensor", back_populates ='sensor', uselist = False)
+    weight_sensor = relationship("WeightSensor", back_populates ='sensor', uselist = False, cascade="all, delete-orphan")
+    fullness_sensor = relationship("FullnessSensor", back_populates ='sensor', uselist = False, cascade="all, delete-orphan")
+    usage_sensor = relationship("UsageSensor", back_populates ='sensor', uselist = False, cascade="all, delete-orphan")
 
 
 
@@ -59,7 +56,7 @@ class WeightSensor(base):
     sensor = relationship("Sensor", back_populates="weight_sensor")
 
     # One to Many relationship with WeightMetric
-    weight_metric = relationship("WeightMetric")
+    weight_metric = relationship("WeightMetric", cascade="all, delete-orphan")
 
 
 
@@ -83,7 +80,7 @@ class FullnessSensor(base):
     sensor = relationship("Sensor", back_populates="fullness_sensor")
 
     # One to Many relationship with FullnessMetric
-    fullness_metric = relationship("FullnessMetric")
+    fullness_metric = relationship("FullnessMetric", cascade="all, delete-orphan")
 
 
 
@@ -105,7 +102,7 @@ class UsageSensor(base):
     sensor = relationship("Sensor", back_populates="usage_sensor")
 
     # One to Many relationship with WeightMetric
-    usage_metric = relationship("UsageMetric")
+    usage_metric = relationship("UsageMetric", cascade="all, delete-orphan")
 
 
 class UsageMetric(base):

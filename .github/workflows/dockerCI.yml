@@ -1,5 +1,6 @@
 name: Docker Image CI
 
+#maybe add branch filter
 on:
   push:
   pull_request:
@@ -13,21 +14,31 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Create a TimescaleDB docker instance and start it
+    - name: Create a TimescaleDB docker instance
       run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
 
     - name: setup python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
-        python-version: 3.8 #install the python version needed
+        python-version: 3.11 #install the python version needed
 
     - name: install necessary python modules
       run: pip install -r requirements.txt
 
-    - name: execute dummy data script #inserts data
+    - name: setup test database with test data
       run: |
-        python models/ci_test_script.py
+        python tests/setup_database.py
+    
+    - name: for testing purposes
+      run: |
+        python tests/dummy_test_print.py
 
-    - name: run tests
+    # unit tests
+    - name: tests the metrics controller
       run: |
-        python models/ci_test_script_tests.py
+        python tests/unit_tests/metrics_controller_tests.py
+
+    - name: tests the bin controller
+      run: |
+        python tests/unit_tests/bin_controller_tests.py
+    
