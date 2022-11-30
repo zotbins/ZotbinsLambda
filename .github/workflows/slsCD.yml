@@ -12,14 +12,18 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
+       
     steps:
     - uses: actions/checkout@master
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install -g serverless@3
     - run: npm ci
+    - name: setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11 #install the python version needed
     # - name: change directory
     #   run: cd ./ZotbinsLambda
 
