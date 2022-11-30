@@ -72,7 +72,7 @@ def encode_fullness_info(fullness: FullnessMetric) -> dict:
     "Returns dictionary with FullnessMetric attributes"
 
     return {
-        "id": fullness.id,
+        #"id": fullness.id,
         "timestamp": fullness.timestamp.isoformat(sep=' ', timespec='seconds'),
         "fullness": fullness.fullness,
         "sensor_id": fullness.sensor_id
@@ -110,7 +110,7 @@ def encode_usage_info(usage: UsageMetric) -> dict:
     "Returns dictionary with UsageMetric attributes"
 
     return {
-        "id": usage.id,
+        #"id": usage.id,
         "timestamp": usage.timestamp.isoformat(sep=' ', timespec='seconds'),
         "used_rate": usage.used_rate,
         "sensor_id": usage.sensor_id
@@ -148,7 +148,7 @@ def encode_weight_info(weight: WeightMetric) -> dict:
     "Returns dictionary with WeightMetric attributes"
 
     return {
-        "id": weight.id,
+        #"id": weight.id,
         "timestamp": weight.timestamp.isoformat(sep=' ', timespec='seconds'),
         "weight": weight.weight,
         "sensor_id": weight.sensor_id

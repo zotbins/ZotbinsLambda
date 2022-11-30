@@ -1,13 +1,10 @@
 import enum
 
-from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
-db = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 base = declarative_base()
-
 
 class BinType(enum.Enum):
     T = "TRASH"

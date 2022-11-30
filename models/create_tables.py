@@ -1,6 +1,9 @@
-from db_models import base, db
+from db_models import base
 from db_models import BinInfo, Sensor, WeightSensor, FullnessSensor, UsageSensor
 from db_models import WeightMetric, FullnessMetric, UsageMetric
+from sqlalchemy import create_engine
+
+db = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 
 tables_classes = [
     BinInfo.__table__,
