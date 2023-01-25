@@ -23,14 +23,14 @@ jobs:
     - name: setup python
       uses: actions/setup-python@v4
       with:
-        python-version: 'pypy3.9' #install the python version needed
+        python-version: 3.9 #install the python version needed
     # - name: change directory
     #   run: cd ./ZotbinsLambda
 
     - name: serverless deploy
       uses: dhollerbach/github-action-serverless-with-python-requirements@master
       with:
-        args: deploy
+        args: ''
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
