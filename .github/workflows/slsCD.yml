@@ -20,15 +20,15 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-#    - name: setup python
-#      uses: actions/setup-python@v4
-#      with:
-#        python-version: 'pypy3.9' #install the python version needed
+    - name: setup python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 'pypy3.9' #install the python version needed
     # - name: change directory
     #   run: cd ./ZotbinsLambda
 
     - name: serverless deploy
-      uses: serverless/github-action@v3.1
+      uses: dhollerbach/github-action-serverless-with-python-requirements@master
       with:
         args: deploy
       env:
