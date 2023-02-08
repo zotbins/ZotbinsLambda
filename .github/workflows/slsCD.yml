@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: [Docker Image CI]
     types: [completed]
+    branches: [sls_deployment]
 
 jobs:
   on-success:
