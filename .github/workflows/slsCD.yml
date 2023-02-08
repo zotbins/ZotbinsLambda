@@ -1,9 +1,6 @@
 name: deploy sls functions
 
 on:
-  push:
-    branches:
-      - sls_deployment
   workflow_run:
     workflows: ["Docker Image CI"]
     types:
