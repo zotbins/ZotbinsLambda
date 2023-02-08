@@ -4,14 +4,21 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey, Enum
 from sqlalchemy.orm import relationship
 
+# Defines the tables within our database
+
 base = declarative_base()
 
+# Our trash bins can be categorized as either trash, recycling, or compost
 class BinType(enum.Enum):
     T = "TRASH"
     R = "RECYCLABLE"
     C = "COMPOST"
 
 
+# Model for our trash bins
+# keeps track of location and type
+#   # location will be kept track of in lattitude and longitude
+#   # bin type corresponds with BinType
 class BinInfo(base):
     __tablename__ = "bin_info"
     uuid = Column(String(36))
@@ -26,7 +33,15 @@ class BinInfo(base):
     sensors = relationship("Sensor", cascade="all, delete-orphan")
 
 
-
+# Model for our general sensors
+# keeps track of the sensor's unit of measurement,
+# model, and make
+#   # For unit of measurement:
+#       # Weight sensors will be kg
+#       # Fullness sensors will be mm
+#       # Usage sensors will be Number of Trash thrown away within 30 minute interval
+# Will be associated with only one specific weight sensor,
+# fullness sensor, or usage sensor
 class Sensor(base):
     __tablename__ = "sensor"
     measurement_units = Column(String(64))
@@ -45,7 +60,10 @@ class Sensor(base):
     usage_sensor = relationship("UsageSensor", back_populates ='sensor', uselist = False, cascade="all, delete-orphan")
 
 
-
+# Model for our weight sensors
+# keeps track of the sensors configuration and calibration value
+# Each weight sensor will be associated with one general sensor and multiple
+# weight metrics that it is associated with
 class WeightSensor(base):
     __tablename__ = "weight_sensor"
     configuration = Column(String(64))
@@ -69,7 +87,10 @@ class WeightMetric(base):
     sensor_id = Column(Integer, ForeignKey("weight_sensor.sensor_id"))
 
 
-
+# Model for our fullness sensors
+# keeps track of the sensors configuration and calibration value
+# Each fullness sensor will be associated with one general sensor and multiple
+# fullness metrics that it is associated with
 class FullnessSensor(base):
     __tablename__ = "fullness_sensor"
     installed_where = Column(String)

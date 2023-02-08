@@ -6,39 +6,36 @@ on:
   pull_request:
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Create a TimescaleDB docker instance
-      run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
+      - name: Create a TimescaleDB docker instance
+        run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
 
-    - name: setup python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.11 #install the python version needed
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11 #install the python version needed
 
-    - name: install necessary python modules
-      run: pip install -r requirements.txt
+      - name: install necessary python modules
+        run: pip install -r requirements.txt
 
-    - name: setup test database with test data
-      run: |
-        python tests/setup_database.py
-    
-    - name: for testing purposes
-      run: |
-        python tests/dummy_test_print.py
+      - name: setup test database with test data
+        run: |
+          python tests/setup_database.py
 
-    # unit tests
-    - name: tests the metrics controller
-      run: |
-        python tests/unit_tests/metrics_controller_tests.py
+      - name: for testing purposes
+        run: |
+          python tests/dummy_test_print.py
 
-    - name: tests the bin controller
-      run: |
-        python tests/unit_tests/bin_controller_tests.py
-    
+      # unit tests
+      - name: tests the metrics controller
+        run: |
+          python tests/unit_tests/metrics_controller_tests.py
+
+      - name: tests the bin controller
+        run: |
+          python tests/unit_tests/bin_controller_tests.py
