@@ -2,7 +2,7 @@ name: deploy sls functions
 
 on:
   workflow_run:
-    workflows: ["Docker Image CI"]
+    workflows: [Docker Image CI]
     types:
       - completed
 
