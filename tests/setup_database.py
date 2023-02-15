@@ -1,5 +1,3 @@
-
-
 import random
 from nanoid import generate
 
@@ -26,7 +24,6 @@ from sqlalchemy import create_engine
 #from sqlalchemy import datetime and timedelta
 from datetime import datetime
 from datetime import timedelta
-
 
 db = create_engine("postgresql://postgres:password@localhost:5432/postgres")
 
@@ -182,9 +179,6 @@ def gen_UsageMetric(session: Session, sen_id: int, num_metrics: int):
         new_usage_metric = UsageMetric(used_rate = r_used_rate, timestamp = r_timestamp, sensor_id = sen_id)
         session.add(new_usage_metric)
 
-
-
-
 #Helper Functions
 # Helper function to get all the IDs in the database
 def _get_ids(id_dict: dict, entity, session: Session):
@@ -200,13 +194,9 @@ def _get_ids(id_dict: dict, entity, session: Session):
 # Helper function that generates a random ID
 def _gen_id(id_dict: dict):
     while True:
-        ran_id = random.randint(0,9999)
+        ran_id = random.randint(13,9999)
         if ran_id not in id_dict:
             return ran_id
-
-
-
-
 
 if __name__ == '__main__':
     
@@ -216,6 +206,8 @@ if __name__ == '__main__':
     #for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor,WeightMetric,FullnessMetric,UsageMetric]: _get_ids(id_dict, entity, session)
     for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor]: _get_ids(id_dict, entity, session)
     
+    #Generates testing Bins
+    # gen_testing_bins(id_dict, session)
 
     #Generates Bins
     gen_Bin(id_dict, session)
@@ -240,9 +232,70 @@ if __name__ == '__main__':
     for w_sensor_id in weight_sensors:
         gen_WeightMetric(session, w_sensor_id, num_data)
 
+    # Hardcoding values for testing
 
+    # Create testing bins
+    trash_test_bin = _gen_BinInfo(1, BinType.T, 1.11, -1.11, session)
+    recycle_test_bin = _gen_BinInfo(2, BinType.R, 2.22, -2.22, session)
+    compost_test_bin = _gen_BinInfo(3, BinType.C, 3.33, -3.33, session)
+    session.add(trash_test_bin)
+    session.add(recycle_test_bin)
+    session.add(compost_test_bin)
+    id_dict[1] = type(trash_test_bin)
+    id_dict[2] = type(recycle_test_bin)
+    id_dict[3] = type(compost_test_bin)
+    
+    timestamp = datetime(year=2023, month=2, day=15)
+    timestamp1 = datetime(year=2023, month=2, day=14)
+    timestamp2 = datetime(year=2023, month=2, day=13)
 
+    # Weight sensor and metrics
+    r_configuration = 'defualt'
+    r_calibration_value = 12.0
+    #       Trash
+    session.add(Sensor(id = 4, measurement_units = 'kg', model = 'Lidar', make = 'version 1', waste_bin_id = 1))
+    session.add(WeightSensor(sensor_id = 4, configuration = r_configuration, calibration_value = r_calibration_value))
+    session.add(WeightMetric(weight = 111, timestamp = timestamp, sensor_id = 4))
+    #       Recycle
+    session.add(Sensor(id = 5, measurement_units = 'kg', model = 'Lidar', make = 'version 1', waste_bin_id = 2))
+    session.add(WeightSensor(sensor_id = 5, configuration = r_configuration, calibration_value = r_calibration_value))
+    session.add(WeightMetric(weight = 111, timestamp = timestamp1, sensor_id = 5))
+    #       Compost
+    session.add(Sensor(id = 6, measurement_units = 'kg', model = 'Lidar', make = 'version 1', waste_bin_id = 3))
+    session.add(WeightSensor(sensor_id = 6, configuration = r_configuration, calibration_value = r_calibration_value))
+    session.add(WeightMetric(weight = 111, timestamp = timestamp2, sensor_id = 6))
 
+    # Fullness sensor and metrics
+    r_installed_where = 'Top of Bin'
+    r_bin_height = 48
+    #       Trash
+    session.add(Sensor(id = 7, measurement_units = 'mm', model = 'Ultrasonic', make = 'version 1', waste_bin_id = 1))
+    session.add(FullnessSensor(sensor_id = 7, installed_where = r_installed_where, bin_height = r_bin_height))
+    session.add(FullnessMetric(fullness = 222, timestamp = timestamp, sensor_id = 7))
+    #       Recycle
+    session.add(Sensor(id = 8, measurement_units = 'mm', model = 'Ultrasonic', make = 'version 1', waste_bin_id = 2))
+    session.add(FullnessSensor(sensor_id = 8, installed_where = r_installed_where, bin_height = r_bin_height))
+    session.add(FullnessMetric(fullness = 222, timestamp = timestamp1, sensor_id = 8))
+    #       Compost
+    session.add(Sensor(id = 9, measurement_units = 'mm', model = 'Ultrasonic', make = 'version 1', waste_bin_id = 3))
+    session.add(FullnessSensor(sensor_id = 9, installed_where = r_installed_where, bin_height = r_bin_height))
+    session.add(FullnessMetric(fullness = 222, timestamp = timestamp2, sensor_id = 9))
+    
+    # Usage sensor and metrics
+    r_maximum_range = 10
+    #       Trash
+    session.add(Sensor(id = 10, measurement_units = 'Number of Trash thrown away within 30 minute interval', model = 'Breakbeam', make = 'version 1', waste_bin_id = 1))
+    session.add(UsageSensor(sensor_id = 10, maximum_range = r_maximum_range))
+    session.add(UsageMetric(used_rate = 3, timestamp = timestamp, sensor_id = 10))
+    #       Recycle
+    session.add(Sensor(id = 11, measurement_units = 'Number of Trash thrown away within 30 minute interval', model = 'Breakbeam', make = 'version 1', waste_bin_id = 2))
+    session.add(UsageSensor(sensor_id = 11, maximum_range = r_maximum_range))
+    session.add(UsageMetric(used_rate = 3, timestamp = timestamp1, sensor_id = 11))
+    #       Compost
+    session.add(Sensor(id = 12, measurement_units = 'Number of Trash thrown away within 30 minute interval', model = 'Breakbeam', make = 'version 1', waste_bin_id = 3))
+    session.add(UsageSensor(sensor_id = 12, maximum_range = r_maximum_range))
+    session.add(UsageMetric(used_rate = 3, timestamp = timestamp2, sensor_id = 12))
+    
     # Commit and close session
     session.commit()
 
