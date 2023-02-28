@@ -93,7 +93,7 @@ def gen_Sensors(id_dict: dict, session: Session, bin_id: int):
 def gen_WeightSensor(ran_id: int, session: Session):
     # Generates a random WeightSensor Object given its sensor ID
 
-    r_configuration = 'defualt'
+    r_configuration = 'default'
     r_calibration_value = random.uniform(-0.0001, 0.0001)
 
     return WeightSensor(sensor_id = ran_id, configuration = r_configuration, calibration_value = r_calibration_value)
@@ -198,42 +198,7 @@ def _gen_id(id_dict: dict):
         if ran_id not in id_dict:
             return ran_id
 
-if __name__ == '__main__':
-    
-    
-    # Puts all the possible ID's in a dictionary whose value is its associated object
-    id_dict = dict()
-    #for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor,WeightMetric,FullnessMetric,UsageMetric]: _get_ids(id_dict, entity, session)
-    for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor]: _get_ids(id_dict, entity, session)
-    
-    #Generates testing Bins
-    # gen_testing_bins(id_dict, session)
-
-    #Generates Bins
-    gen_Bin(id_dict, session)
-
-    
-    #Gathers possible Usage, Weight, and Fullness Sensors
-    fullness_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == FullnessSensor] 
-    usage_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == UsageSensor]
-    weight_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == WeightSensor]
-    
-
-    #Asks user how much metric data they would like to create
-    num_data = 10
-
-    #Generates data for ALL SENSORS
-    for f_sensor_id in fullness_sensors:
-        gen_FullnessMetric(session, f_sensor_id, num_data)
-    
-    for u_sensor_id in usage_sensors:
-        gen_UsageMetric(session, u_sensor_id, num_data)
-    
-    for w_sensor_id in weight_sensors:
-        gen_WeightMetric(session, w_sensor_id, num_data)
-
-    # Hardcoding values for testing
-
+def gen_testing_data():
     # Create testing bins
     trash_test_bin = _gen_BinInfo(1, BinType.T, 1.11, -1.11, session)
     recycle_test_bin = _gen_BinInfo(2, BinType.R, 2.22, -2.22, session)
@@ -250,7 +215,7 @@ if __name__ == '__main__':
     timestamp2 = datetime(year=2023, month=2, day=13)
 
     # Weight sensor and metrics
-    r_configuration = 'defualt'
+    r_configuration = 'default'
     r_calibration_value = 12.0
     #       Trash
     session.add(Sensor(id = 4, measurement_units = 'kg', model = 'Lidar', make = 'version 1', waste_bin_id = 1))
@@ -295,6 +260,43 @@ if __name__ == '__main__':
     session.add(Sensor(id = 12, measurement_units = 'Number of Trash thrown away within 30 minute interval', model = 'Breakbeam', make = 'version 1', waste_bin_id = 3))
     session.add(UsageSensor(sensor_id = 12, maximum_range = r_maximum_range))
     session.add(UsageMetric(used_rate = 3, timestamp = timestamp2, sensor_id = 12))
+
+if __name__ == '__main__':
+    
+    
+    # Puts all the possible ID's in a dictionary whose value is its associated object
+    id_dict = dict()
+    #for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor,WeightMetric,FullnessMetric,UsageMetric]: _get_ids(id_dict, entity, session)
+    for entity in [BinInfo,WeightSensor,FullnessSensor,UsageSensor]: _get_ids(id_dict, entity, session)
+    
+    #Generates testing Bins
+    # gen_testing_bins(id_dict, session)
+
+    #Generates Bins
+    gen_Bin(id_dict, session)
+
+    
+    #Gathers possible Usage, Weight, and Fullness Sensors
+    fullness_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == FullnessSensor] 
+    usage_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == UsageSensor]
+    weight_sensors = [identification for identification, obj_type in id_dict.items() if obj_type == WeightSensor]
+    
+
+    #Asks user how much metric data they would like to create
+    num_data = 10
+
+    #Generates data for ALL SENSORS
+    for f_sensor_id in fullness_sensors:
+        gen_FullnessMetric(session, f_sensor_id, num_data)
+    
+    for u_sensor_id in usage_sensors:
+        gen_UsageMetric(session, u_sensor_id, num_data)
+    
+    for w_sensor_id in weight_sensors:
+        gen_WeightMetric(session, w_sensor_id, num_data)
+
+    # Hardcoding values for testing
+    gen_testing_data()
     
     # Commit and close session
     session.commit()
