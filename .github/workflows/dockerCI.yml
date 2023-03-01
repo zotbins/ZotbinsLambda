@@ -41,4 +41,12 @@ jobs:
     - name: tests the bin controller
       run: |
         python tests/unit_tests/bin_controller_tests.py
+
+    - name: build API for testing
+      run: |
+        sls offline
+    
+    - name: run endpoint tests
+      run: |
+        python tests/unit_tests/endpoint_testing.py
     
