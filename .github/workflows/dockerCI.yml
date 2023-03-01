@@ -53,7 +53,7 @@ jobs:
         python tests/unit_tests/bin_controller_tests.py
 
     - name: build API for testing
-      uses: serverless/github_action@v3.1
+      uses: serverless/github-action@v3.1
       with:
         args: offline
     
