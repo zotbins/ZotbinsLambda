@@ -11,8 +11,18 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [ 16.x ]
+
     steps:
     - uses: actions/checkout@v3
+
+    - name: setup node
+      uses: actions/setup_node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
 
     - name: Create a TimescaleDB docker instance
       run: docker run -d --name timescaledbci -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg12
@@ -43,8 +53,9 @@ jobs:
         python tests/unit_tests/bin_controller_tests.py
 
     - name: build API for testing
-      run: |
-        sls offline
+      uses: serverless/github_action@v3.1
+      with:
+        args: offline
     
     - name: run endpoint tests
       run: |
