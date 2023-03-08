@@ -60,7 +60,7 @@ jobs:
 
     - name: build API for testing and run endpoint tests
       run: |
-        serverless offline &&
+        ./node_modules/serverless/bin/serverless.js offline &&
         sleep 2 &&
         python tests/unit_tests/endpoint_testing.py && 
         kill -9 'lsof -i:3000 -t'
