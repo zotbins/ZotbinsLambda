@@ -53,12 +53,19 @@ jobs:
       run: |
         python tests/unit_tests/bin_controller_tests.py
 
-    - name: build API for testing
-      uses: serverless/github-action@v3.1
-      with:
-        args: offline
+    # - name: build API for testing
+    #   uses: serverless/github-action@v3.1
+    #   with:
+    #     args: offline
     
-    - name: run endpoint tests
-      run: |
-        python tests/unit_tests/endpoint_testing.py
+    - run: |
+        sls offline &&
+        sleep 2 &&
+        python tests/unit_tests/endpoint_testing.py && 
+        kill -9 'lsof -i:3000 -t'
+
+    
+    # - name: run endpoint tests
+    #   run: |
+    #     python tests/unit_tests/endpoint_testing.py
     
