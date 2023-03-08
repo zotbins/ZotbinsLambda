@@ -63,7 +63,7 @@ jobs:
         ./node_modules/serverless/bin/serverless.js offline &
         sleep 10
         python tests/endpoint_testing.py 
-        kill -9 $(pidof ./node_modules/serverless/bin/serverless.js)
+        kill -9 `lsof -i:3000 -t`
 
     
     # - name: run endpoint tests
