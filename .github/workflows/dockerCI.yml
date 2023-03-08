@@ -62,7 +62,8 @@ jobs:
       run: |
         ./node_modules/serverless/bin/serverless.js offline &
         sleep 5 
-        python ./tests/unit_tests/endpoint_testing.py 
+        cd ..
+        python /tests/unit_tests/endpoint_testing.py 
         kill -9 'lsof -i:3000 -t'
 
     
