@@ -26,13 +26,12 @@ def get_weight_handler(event, context):
 
     if not start_timestamp and not end_timestamp:
         sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{bin_id}'"
+    elif not end_timestamp:
+        sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{bin_id}' AND time >= '{start_timestamp}'"
 
+    elif not start_timestamp:
+        sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{bin_id}' AND time <= '{end_timestamp}'"
     else:
-        if not start_timestamp:
-            start_timestamp = "2020-01-01 15:00:00"
-        if not end_timestamp:
-            end_timestamp = "2030-01-01 15:00:00"
-
         if start_timestamp > end_timestamp:
             # log the request body to CloudWatch logs
             cloudwatch_logs.put_log_events(
