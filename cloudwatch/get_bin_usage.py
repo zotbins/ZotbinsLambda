@@ -68,14 +68,15 @@ def get_usage_handler(event, context):
                                 "Content-Type": "application/json"
                             }
                         }
-    
+
 
     # TODO: Creating the datetime objects could be a helper function
     # If a start/end timestamp was not provided -> set it to the earliest/latest
     if not START_TIME_STRING:
         START_TIME_STRING = "2020-01-01 15:00:00"
     if not END_TIME_STRING:
-        END_TIME_STRING = "2030-01-01 15:00:00"  # TODO: Need to find a better way to set the end timestamp
+        END_TIME_STRING = "2030-01-01 15:00:00"
+        # TODO: Need to find a better way to set the end timestamp
 
     # Create datetime objects
     FORMAT_DATA = "%y-%m-%d %H:%M:%S"
@@ -92,12 +93,16 @@ def get_usage_handler(event, context):
     result = {}
     message = ""
     if start_timestamp > end_timestamp:
-        message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 400,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\nerror: start_timestamp occurs after end_timestamp"
+        message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 400, \
+                  \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
+                  \nerror: start_timestamp occurs after end_timestamp"
         result = ERROR_400_INVALID_TIME
     else:
-        sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{BIN_ID}' AND time BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
-        
-        # TODO: These 2 lines of querying the database could be abstracted away, and we only work with the result from the db
+        sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{BIN_ID}' \
+               AND time BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
+
+        # TODO: These 2 lines of querying the database could be abstracted away
+        # then we only work with the result from the db
         cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
         cursor.execute(sql)
 
@@ -108,13 +113,16 @@ def get_usage_handler(event, context):
 
         if len(list_of_dicts) == 0:
             # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 404,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\nerror: Bin not found: {BIN_ID}"
+            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 404,\
+                       \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
+                       \nerror: Bin not found: {BIN_ID}"
             result = ERROR_404_NOT_FOUND
 
         else:
 
             # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 200,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID}"
+            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 200,\
+                        \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID}"
             # Successful result
             result = {
                 'statusCode': 200,
