@@ -68,6 +68,7 @@ def get_usage_handler(event, context):
                                 "Content-Type": "application/json"
                             }
                         }
+    
 
     # TODO: Creating the datetime objects could be a helper function
     # If a start/end timestamp was not provided -> set it to the earliest/latest
@@ -91,7 +92,7 @@ def get_usage_handler(event, context):
     result = {}
     message = ""
     if start_timestamp > end_timestamp:
-        message = f"time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},\nstatus: 400,\nhttpMethod: GET,\nrequestPath: /get/{{bin_id}}/weight,\nbin_id: {BIN_ID},\nerror: start_timestamp occurs after end_timestamp"
+        message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 400,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\nerror: start_timestamp occurs after end_timestamp"
         result = ERROR_400_INVALID_TIME
     else:
         sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{BIN_ID}' AND time BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
@@ -107,13 +108,13 @@ def get_usage_handler(event, context):
 
         if len(list_of_dicts) == 0:
             # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},\nstatus: 404,\nhttpMethod: GET,\nrequestPath: /get/{{bin_id}}/weight,\nbin_id: {BIN_ID},\nerror: Bin not found: {BIN_ID}"
+            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 404,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\nerror: Bin not found: {BIN_ID}"
             result = ERROR_404_NOT_FOUND
 
         else:
 
             # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')},\nstatus: 200,\nhttpMethod: GET,\nrequestPath: /get/{{bin_id}}/weight,\nbin_id: {BIN_ID}"
+            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 200,\nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID}"
             # Successful result
             result = {
                 'statusCode': 200,
