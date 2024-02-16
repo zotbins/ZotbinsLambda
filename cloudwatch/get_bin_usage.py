@@ -14,8 +14,8 @@ def get_usage_handler(event, context):
     """
     This function will retrieve a bin's usage data
     Parameters
-    Event: 
-    Context:
+    Event: Disctionary holding information about the event that triggered the handler
+    Context: Interface to get info about the function call, metadata about the function
     Returns a dictionary
     """
     # SET UP
@@ -82,55 +82,56 @@ def get_usage_handler(event, context):
     FORMAT_DATA = "%y-%m-%d %H:%M:%S"
     try:
         start_timestamp = datetime.datetime.strptime(START_TIME_STRING, FORMAT_DATA)
-    except ValueError:
-        result =  ERROR_400_IMPROPER_TIMESTAMP
-    try:
         end_timestamp = datetime.datetime.strptime(END_TIME_STRING, FORMAT_DATA)
     except ValueError:
-        result = ERROR_400_IMPROPER_TIMESTAMP
-
-    # Actual function really starts here
-    result = {}
-    message = ""
-    if start_timestamp > end_timestamp:
+        result =  ERROR_400_IMPROPER_TIMESTAMP
         message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 400, \
-                  \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
-                  \nerror: start_timestamp occurs after end_timestamp"
-        result = ERROR_400_INVALID_TIME
+                    \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
+                    \nerror: Improper timestamp"
     else:
-        sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{BIN_ID}' \
-               AND time BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
 
-        # TODO: These 2 lines of querying the database could be abstracted away
-        # then we only work with the result from the db
-        cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cursor.execute(sql)
-
-        result = cursor.fetchall()
-        list_of_dicts = []
-        for row in result:
-            list_of_dicts.append(dict(row))
-
-        if len(list_of_dicts) == 0:
-            # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 404,\
-                       \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
-                       \nerror: Bin not found: {BIN_ID}"
-            result = ERROR_404_NOT_FOUND
-
+        # Actual function really starts here
+        result = {}
+        message = ""
+        if start_timestamp > end_timestamp:
+            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 400, \
+                    \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
+                    \nerror: start_timestamp occurs after end_timestamp"
+            result = ERROR_400_INVALID_TIME
         else:
+            sql = f"SELECT weight, time from ts_bins WHERE bin_id = '{BIN_ID}' \
+                AND time BETWEEN '{start_timestamp}' AND '{end_timestamp}'"
 
-            # log the request body to CloudWatch logs
-            message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 200,\
-                        \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID}"
-            # Successful result
-            result = {
-                'statusCode': 200,
-                'body': json.dumps(list_of_dicts, default=str),
-                'headers': {
-                    "Content-Type": "application/json"
+            # TODO: These 2 lines of querying the database could be abstracted away
+            # then we only work with the result from the db
+            cursor = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            cursor.execute(sql)
+
+            result = cursor.fetchall()
+            list_of_dicts = []
+            for row in result:
+                list_of_dicts.append(dict(row))
+
+            if len(list_of_dicts) == 0:
+                # log the request body to CloudWatch logs
+                message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 404,\
+                        \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID},\
+                        \nerror: Bin not found: {BIN_ID}"
+                result = ERROR_404_NOT_FOUND
+
+            else:
+
+                # log the request body to CloudWatch logs
+                message = f"time: {datetime.datetime.now().strftime(FORMAT_DATA)},\nstatus: 200,\
+                            \nhttpMethod: GET,\nrequestPath: /get/{{BIN_ID}}/weight,\nbin_id: {BIN_ID}"
+                # Successful result
+                result = {
+                    'statusCode': 200,
+                    'body': json.dumps(list_of_dicts, default=str),
+                    'headers': {
+                        "Content-Type": "application/json"
+                    }
                 }
-            }
 
     # Log cloudwatch
     cloudwatch_logs.put_log_events(
